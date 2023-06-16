@@ -25,13 +25,13 @@ We believe that our current models achieve fair performance, since `sugar` is us
 
 ## Final Model
 
-For our final model, we add three more features: ‘calories’, ‘minutes’ and ‘carbohydrates.’ When looking at recipes of desserts, we could expect that they would have higher calories compared to other foods since a lot more high-calorie ingredients such as sugar, butter, and cream are used to make desserts. We also believe that it takes more time to make desserts since we would usually expect a longer preparation and baking time for making desserts. Some desserts need to be put into the fridge for hours after it’s baked and before they are ready which would even make their ‘minutes’ to have larger values. Since we could observe some general patterns for desserts in these three features, we believe that including these features would improve our model’s accuracy in predicting whether the recipe is a dessert. Since sugar is one of the main types of carbohydrates and flour, which is high in carbs, is one of the most common ingredients used in desserts, we believe that we would see desserts tend to have higher total carbohydrates compared to other foods.
+For our final model, we add three more features: ‘calories’, ‘minutes’ and ‘carbohydrates.’ When looking at recipes of desserts, we could expect that they would have higher calories compared to other foods since a lot more high-calorie ingredients such as sugar, butter, and cream are used to make desserts. We also believe that it takes more time to make desserts since we would usually expect a longer preparation and baking time for making desserts. Some desserts need to be put into the fridge for hours after it’s baked and before they are ready which would even make their ‘minutes’ to have larger values. Since we could observe some general patterns for desserts in these three features, we believe that including these features would improve our model’s f1-score in predicting whether the recipe is a dessert. Since sugar is one of the main types of carbohydrates and flour, which is high in carbs, is one of the most common ingredients used in desserts, we believe that we would see desserts tend to have higher total carbohydrates compared to other foods.
 
 We decided to train our final model with RandomForestClassifer() and see if our model performance improved compared to the one fitted in our baseline models. For this model, we will be using our training set generated before fitting our baseline models and we will be using [`total_fat`, `sugar`, `calories`, `minutes`, `carbohydrates`, `desserts`]. Then we would like to know what is the best tree depth for our random forest model, so we are going to perform a 5-fold cross validation. In each fold, we are going to fit a random forest model from `max_depth = 2` to `max_depth = 30`, `min_samples_split': [2, 5, 10, 20]`, and `criterion: ['gini', 'entropy']` and see which parameters would have the highest average accuracy rate across 5 folds.
 
-The best parameters ended up being: `'criterion': 'gini', 'max_depth': 29, 'min_samples_split': 2`
+The best parameters ended up being: `'criterion': 'gini', 'max_depth': 28, 'min_samples_split': 2`
 
-When we tested this model with our test set, the f1-score yielded is about 0.908. Compared to our baseline models which have accuracies around 0.4827, our model has a around 0.42 increase in its prediction f1-score.
+When we tested this model with our test set, the f1-score yielded is about 0.908. Compared to our baseline models which had f1-score around 0.4827, our model has a around 0.42 increase in its prediction f1-score.
 
 We see this reflected in its confusion matrix as well.
 
@@ -42,8 +42,9 @@ We see this reflected in its confusion matrix as well.
 
 We decided to choose the rating which the recipe got to check if our model classified higher rated recipes and lower rated recipes equally as well. Higher ratings were a part of group X while lower ratings were a part of group Y. Our hypothesis were the following:
 
-**Null**: Our model is fair. Its positive parity for higher and lower ratings is roughly the same and any differences are due to random chance alone.
-**Alternative**:  Our model is not fair. Its positive parity for higher and lower ratings are different.
+**Null**: Our model is fair. Its true positive parity for higher and lower ratings is roughly the same and any differences are due to random chance alone.
 
-We chose the absolute difference of means as our test statistics. We decided to choose 10% significance level since we are doing a one-tailed test in order to reject the null hypothesis at a high significance level. The p-value we found was 0.206, 0.206 is less extreme than 0.1, which is why we fail to reject the null. Our model is fair
+**Alternative**:  Our model is not fair. Its true positive parity for higher and lower ratings are different.
+
+We chose the absolute difference of means as our test statistics. We decided to choose 10% significance level since we are doing a one-tailed test in order to reject the null hypothesis at a high significance level. The p-value we found was 0.206, 0.206 is less extreme than 0.1, which is why we fail to reject the null, and conclude that our model is fair.
 
